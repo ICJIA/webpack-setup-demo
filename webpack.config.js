@@ -4,6 +4,7 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const chalk = require("chalk");
 const log = console.log;
 
@@ -23,7 +24,15 @@ let myPlugins = [
   })
 ];
 
-let prodPlugins = [new CleanWebpackPlugin(["build"]), new MinifyPlugin({})];
+let prodPlugins = [
+  new CleanWebpackPlugin(["build"]),
+  new MinifyPlugin({}),
+  new CopyWebpackPlugin([
+    {
+      from: "./static/**/*"
+    }
+  ])
+];
 
 /** Loaders
  *
@@ -42,7 +51,8 @@ let myModules = [
       fallback: "style-loader",
       use: [{ loader: "css-loader", options: { minimize: true } }]
     })
-  }
+  },
+  { test: /\.(jpe?g|png|gif|ico)$/i, loader: "file-loader?name=[name].[ext]" }
 ];
 
 // setup webpack for env variables
@@ -56,7 +66,7 @@ module.exports = env => {
 
   return {
     entry: {
-      main: "./index.js",
+      main: "./src/index.js",
       vendor: ["lodash", "react", "react-dom"]
     },
     devServer: {

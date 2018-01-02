@@ -1,28 +1,20 @@
 import _ from "lodash";
-import "./src/styles.css";
-import Hello from "./src/Hello.js";
-import Head from "./src/Head.js";
+import "./css/styles.css";
+import Hello from "./components/Hello.js";
+import Head from "./components/Head.js";
 import { Helmet } from "react-helmet";
+import img from "./img/favicon.ico";
 
 import React, { Component } from "react";
 import { render } from "react-dom";
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
+  state = { counter: 1 };
 
-    this.state = { counter: 1 };
-    this.log = this.log.bind(this);
-    this.btnClick = this.btnClick.bind(this);
-  }
-
-  btnClick(e) {
+  btnClick = () => {
     console.log("click");
     this.setState({ counter: this.state.counter + 1 });
-  }
-  log(str) {
-    console.log(str);
-  }
+  };
 
   render() {
     return (
@@ -35,5 +27,3 @@ export default class App extends Component {
     );
   }
 }
-
-render(<App />, document.getElementById("app"));
