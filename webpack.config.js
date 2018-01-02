@@ -3,6 +3,9 @@ var webpack = require("webpack");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const chalk = require("chalk");
+const log = console.log;
 
 /** Plugins
  *
@@ -10,9 +13,10 @@ const MinifyPlugin = require("babel-minify-webpack-plugin");
  */
 let myPlugins = [
   new HtmlWebpackPlugin({
-    template: "./index.html",
+    template: "./src/index.html",
     inject: true
   }),
+  new ExtractTextPlugin("styles.css"),
   new webpack.optimize.CommonsChunkPlugin({
     name: "vendor",
     minChunks: Infinity
@@ -26,11 +30,18 @@ let prodPlugins = [new CleanWebpackPlugin(["build"]), new MinifyPlugin({})];
  *
  */
 
-let myLoaders = [
+let myModules = [
   {
     test: /\.js$/,
     loader: "babel-loader",
     exclude: /node_modules/
+  },
+  {
+    test: /\.css$/,
+    use: ExtractTextPlugin.extract({
+      fallback: "style-loader",
+      use: "css-loader"
+    })
   }
 ];
 
@@ -38,17 +49,21 @@ let myLoaders = [
 module.exports = env => {
   if (env.production) {
     myPlugins = (myPlugins || []).concat(prodPlugins);
-    console.log("Adding prod plugins");
+    log(chalk.blue("==> Bundling for Production"));
+  } else {
+    log(chalk.yellow("==> Bundling for development"));
   }
+
   return {
     entry: {
       main: "./index.js",
-      vendor: ["lodash"]
+      vendor: ["lodash", "react", "react-dom"]
     },
     devServer: {
       contentBase: path.join(__dirname, "build"),
       compress: true,
-      port: 8080
+      port: 8080,
+      historyApiFallback: true
     },
     output: {
       path: path.resolve(__dirname, "build"),
@@ -56,7 +71,7 @@ module.exports = env => {
       publicPath: "/"
     },
     module: {
-      loaders: myLoaders
+      rules: myModules
     },
     plugins: myPlugins
   };

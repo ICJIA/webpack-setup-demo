@@ -1,43 +1,31 @@
 import _ from "lodash";
+import "./src/styles.css";
+import Hello from "./src/Hello.js";
 
-// const x = () => console.log("Hello, World");
-// x();
+import React, { Component } from "react";
+import { render } from "react-dom";
 
-function resolveAfter2Seconds(x) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(x);
-    }, 2000);
-  });
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { counter: 1 };
+    this.log = this.log.bind(this);
+  }
+
+  log(str) {
+    console.log(str);
+  }
+
+  render() {
+    return (
+      <div>
+        <Hello />
+        <h1>This is a test: {this.state.counter}</h1>
+        {this.log("test")}
+      </div>
+    );
+  }
 }
 
-const injectElement = (target, el, text) => {
-  var element = document.createElement(el);
-  element.appendChild(document.createTextNode(text));
-  return document.getElementById(target).appendChild(element);
-};
-
-// var element = document.createElement("div");
-// element.appendChild(
-//   document.createTextNode("Hello, World")
-// );
-
-// document.getElementById("app").appendChild(element);
-
-async function add1(x) {
-  const a = await resolveAfter2Seconds(20);
-  const b = await resolveAfter2Seconds(30);
-  return x + a + b;
-}
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
-    injectElement("app", "div", "Hello, World");
-    injectElement("app", "div", "Hello, World Part2");
-    add1(10).then(v => {
-      console.log(v); // prints 60 after 4 seconds.
-    });
-  },
-  false
-);
+render(<App />, document.getElementById("app"));
