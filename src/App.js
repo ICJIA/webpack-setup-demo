@@ -4,7 +4,16 @@ import Hello from "./components/Hello.js";
 import Head from "./components/Head.js";
 import { Helmet } from "react-helmet";
 import img from "./img/favicon.ico";
-
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Header,
+  Image,
+  Menu,
+  Segment
+} from "semantic-ui-react";
 import React, { Component } from "react";
 import { render } from "react-dom";
 
@@ -22,7 +31,12 @@ export default class App extends Component {
         <Head />
         <Hello message="Hello from React" />
         <h1>This is a test: {this.state.counter}</h1>
-        <button onClick={this.btnClick}>Click me</button>
+
+        <Divider />
+
+        <Button inverted="true" content="Click me" onClick={this.btnClick} />
+
+        <Divider />
       </div>
     );
   }

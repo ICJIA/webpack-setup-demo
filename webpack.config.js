@@ -24,15 +24,7 @@ let myPlugins = [
   })
 ];
 
-let prodPlugins = [
-  new CleanWebpackPlugin(["build"]),
-  new MinifyPlugin({}),
-  new CopyWebpackPlugin([
-    {
-      from: "./static/**/*"
-    }
-  ])
-];
+let prodPlugins = [new CleanWebpackPlugin(["build"]), new MinifyPlugin({})];
 
 /** Loaders
  *
@@ -67,7 +59,7 @@ module.exports = env => {
   return {
     entry: {
       main: "./src/index.js",
-      vendor: ["lodash", "react", "react-dom"]
+      vendor: ["lodash", "react", "react-dom", "semantic-ui-react"]
     },
     devServer: {
       contentBase: path.join(__dirname, "build"),
