@@ -3,6 +3,6 @@ import { render } from "react-dom";
 
 export default class Hello extends Component {
   render() {
-    return <div>Hello from react</div>;
+    return <div>{this.props.message}</div>;
   }
 }
