@@ -4,13 +4,51 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 
+/** Plugins
+ *
+ *
+ */
+let myPlugins = [
+  new HtmlWebpackPlugin({
+    template: "./index.html",
+    inject: true
+  }),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: "vendor",
+    minChunks: Infinity
+  })
+];
+
+let prodPlugins = [new CleanWebpackPlugin(["build"]), new MinifyPlugin({})];
+
+/** Loaders
+ *
+ *
+ */
+
+let myLoaders = [
+  {
+    test: /\.js$/,
+    loader: "babel-loader",
+    exclude: /node_modules/
+  }
+];
+
 // setup webpack for env variables
 module.exports = env => {
-  console.log("Production: ", env.production);
+  if (env.production) {
+    myPlugins = (myPlugins || []).concat(prodPlugins);
+    console.log("Adding prod plugins");
+  }
   return {
     entry: {
       main: "./index.js",
       vendor: ["lodash"]
+    },
+    devServer: {
+      contentBase: path.join(__dirname, "build"),
+      compress: true,
+      port: 8080
     },
     output: {
       path: path.resolve(__dirname, "build"),
@@ -18,30 +56,8 @@ module.exports = env => {
       publicPath: "/"
     },
     module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          loader: "babel-loader",
-          exclude: /node_modules/
-        }
-      ]
+      loaders: myLoaders
     },
-    plugins: [
-      new CleanWebpackPlugin(["build"]),
-      new HtmlWebpackPlugin({
-        template: "./index.html",
-        inject: true
-      }),
-      new MinifyPlugin({}),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: "vendor",
-        // filename: "vendor.js"
-        // (Give the chunk a different name)
-
-        minChunks: Infinity
-        // (with more entries, this ensures that no other module
-        //  goes into the vendor chunk)
-      })
-    ]
+    plugins: myPlugins
   };
 };
