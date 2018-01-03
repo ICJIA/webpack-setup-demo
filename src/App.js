@@ -1,43 +1,39 @@
-import _ from "lodash";
-import "./css/styles.css";
-import Hello from "./components/Hello.js";
-import Head from "./components/Head.js";
-import { Helmet } from "react-helmet";
-import img from "./img/favicon.ico";
-import {
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Header,
-  Image,
-  Menu,
-  Segment
-} from "semantic-ui-react";
 import React, { Component } from "react";
 import { render } from "react-dom";
+import { BrowserRouter, Route, NavLink, Link } from "react-router-dom";
+import HomePage from "./components/Home.js";
+import UserPage from "./components/Users.js";
 
-export default class App extends Component {
-  state = { counter: 1 };
+const PrimaryLayout = () => (
+  <div className="primary-layout">
+    <header>Our React Router 4 App</header>
+    <PrimaryHeader />
+    <main>
+      <Route path="/" exact component={HomePage} />
+      <Route path="/users" component={UserPage} />
+    </main>
+  </div>
+);
 
-  btnClick = () => {
-    console.log("click");
-    this.setState({ counter: this.state.counter + 1 });
-  };
+const PrimaryHeader = () => (
+  <header className="primary-header">
+    <h1>React App</h1>
+    <nav>
+      <NavLink to="/" exact activeClassName="active">
+        Home
+      </NavLink>
+      &nbsp;|&nbsp;
+      <NavLink to="/users" activeClassName="active">
+        Users
+      </NavLink>
+    </nav>
+  </header>
+);
 
-  render() {
-    return (
-      <div className="myApp">
-        <Head />
-        <Hello message="Hello from React" />
-        <h1>This is a test: {this.state.counter}</h1>
+const App = () => (
+  <BrowserRouter>
+    <PrimaryLayout />
+  </BrowserRouter>
+);
 
-        <Divider />
-
-        <Button inverted="true" content="Click me" onClick={this.btnClick} />
-
-        <Divider />
-      </div>
-    );
-  }
-}
+export { App };
