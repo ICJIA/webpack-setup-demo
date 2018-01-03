@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --env.development --open",
-    "build": "webpack --env.production  --progress"
+    "build": "webpack --env.production  --progress",
+    "serve": "serve ./build -s",
+    "build:serve": "yarn build && yarn serve"
   },
   "keywords": [],
   "author": "",
